@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		34896F731A01FAF00056D353 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34896F721A01FAF00056D353 /* main.m */; };
-		34896F751A01FB080056D353 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 34896F741A01FB080056D353 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -91,7 +90,7 @@
 		34B154831A01BCAB007920BB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = com.github.mosen;
 				TargetAttributes = {
 					34B1548A1A01BCAB007920BB = {
@@ -121,7 +120,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34896F751A01FB080056D353 /* README.md in Sources */,
 				34896F731A01FAF00056D353 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,6 +146,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -207,7 +206,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = mysides;
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -215,7 +214,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = mysides;
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

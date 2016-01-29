@@ -20,11 +20,13 @@ extern CFStringRef kLSSharedFileListItemManaged;
 
 void print_help(char const *arg0)
 {
-    NSLog(@"Usage:\n");
-    NSLog(@"\t%s list\t- list sidebar items", arg0);
-    NSLog(@"\t%s add <name> <uri> [after]\t- append a sidebar item to the end of the list, or after the given name\n", arg0);
-    //NSLog(@"\t%s insert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n", arg0);
-    NSLog(@"\t%s remove <name>\t- remove a sidebar item\n", arg0);
+    printf("Usage: mysides list | add <name> <uri> | remove <name>\n");
+    printf("\n");
+    printf("\t list - list sidebar items\n");
+    printf("\t add - append a sidebar item to the end of the list\n");
+    //printf("\t\tinsert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n");
+    printf("\t remove - remove a sidebar item\n");
+    printf("\n");
 }
 
 // Find shared file list item by its display name
@@ -32,16 +34,17 @@ void print_help(char const *arg0)
 id find_itemname(LSSharedFileListRef sflRef, NSString *name)
 {
     UInt32 seed;
-    NSArray *list = (__bridge NSArray *)LSSharedFileListCopySnapshot(sflRef, &seed);
+    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
     for(NSObject *obj in list) {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
         CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
         if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
+            if (nameRef) CFRelease(nameRef);
             return (__bridge id)(sflItemRef);
         }
+    if (nameRef) CFRelease(nameRef);
     }
-    
     return nil;
 }
 
@@ -52,6 +55,7 @@ int sidebar_add(NSString *name, NSURL *uri, id after)
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
     CFRelease(sflRef);
+    printf("Added sidebar item with name: %s\n", [name UTF8String]);
     return 1;
 }
 
@@ -61,7 +65,7 @@ int sidebar_remove(NSString *name, NSURL *uri)
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
     UInt32 seed;
     // Grab list snapshot for enumeration
-    NSArray *list = (__bridge NSArray *)LSSharedFileListCopySnapshot(sflRef, &seed);
+    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
     for(NSObject *obj in list)  {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
@@ -73,13 +77,13 @@ int sidebar_remove(NSString *name, NSURL *uri)
         if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
             LSSharedFileListItemRemove(sflRef, sflItemRef);
             CFRelease(sflRef);
-            NSLog(@"Removed sidebar item with name: %@", nameRef);
+            printf("Removed sidebar item with name: %s\n", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
             return 0;
         }
-        
+        if (nameRef) CFRelease(nameRef);
     }
     
-    NSLog(@"Could not find sidebar item with display name: %@", name);
+    printf("Could not find sidebar item with display name: %s", [name UTF8String]);
     CFRelease(sflRef);
     return 1;
 }
@@ -93,39 +97,45 @@ void sidebar_list()
 {
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
     UInt32 seed;
-
+    
     if(!sflRef) {
-        NSLog(@"No list!");
+        printf("No list!");
         return;
     }
     
     // Grab list snapshot for enumeration
-    NSArray *list = (__bridge NSArray *)LSSharedFileListCopySnapshot(sflRef, &seed);
+    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
     for(NSObject *object in list) {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)object;
         CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
         CFURLRef urlRef = NULL;
         LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
-        UInt32 itemId = LSSharedFileListItemGetID(sflItemRef);
-
-        NSLog(@"[%u] %@ -> %@", itemId, (__bridge id)nameRef, (__bridge id)urlRef);
+//        UInt32 itemId = LSSharedFileListItemGetID(sflItemRef);
+        
+        printf("%s -> %s\n",
+               [(NSString *) CFBridgingRelease(nameRef) UTF8String],
+               [(NSString *) CFBridgingRelease(CFURLGetString(urlRef)) UTF8String]);
         if(urlRef)  CFRelease(urlRef);
-        if(nameRef) CFRelease(nameRef);
-
-        CFStringRef props[] = {
-            // kLSSharedFileListItemClass,
-            kLSSharedFileListItemTemplateSystemSelector,
-            kLSSharedFileListSpecialItemIdentifier,
-            kLSSharedFileListItemManaged,
-        };
-        int i;
-        for(i = 0; i < sizeof(props)/sizeof(*props); i++) {
-            CFTypeRef propRef = LSSharedFileListItemCopyProperty(sflItemRef, props[i]);
-            NSLog(@" %p: %@ = %@ (%@)", props[i], (__bridge id)props[i], (__bridge id)propRef, propRef ? (id)CFBridgingRelease(CFCopyTypeIDDescription(CFGetTypeID(propRef))) : nil);
-            if(propRef) CFRelease(propRef);
-        }
-            
+//        if(nameRef) CFRelease(nameRef);
+        
+//        CFStringRef props[] = {
+//            // kLSSharedFileListItemClass,
+//            kLSSharedFileListItemTemplateSystemSelector,
+//            kLSSharedFileListSpecialItemIdentifier,
+//            kLSSharedFileListItemManaged,
+//        };
+//        int i;
+//        for(i = 0; i < sizeof(props)/sizeof(*props); i++) {
+//            CFTypeRef propRef = LSSharedFileListItemCopyProperty(sflItemRef, props[i]);
+//            printf("\t%p: %s = %s (%s)\n", props[i],
+//                   [(NSString *) CFBridgingRelease(props[i]) UTF8String],
+//                   propRef,
+//                   propRef ? [(id)CFBridgingRelease(CFCopyTypeIDDescription(CFGetTypeID(propRef))) UTF8String] : nil
+//                   );
+//            if(propRef) CFRelease(propRef);
+//        }
+        
     }
     
     CFRelease(sflRef);
@@ -148,7 +158,7 @@ int main (int argc, char const *argv[])
         
         if (strcmp(argv[1], "remove") == 0) {
             if (strlen(argv[2]) == 0) {
-                NSLog(@"No name supplied to remove!\n");
+                printf("No name supplied to remove!\n");
                 return 1;
             }
             
@@ -158,11 +168,11 @@ int main (int argc, char const *argv[])
             
         }
         
-    
+        
     } else {
         print_help(argv[0]);
         return 1;
     }
-
+    
     return 0;
 }
