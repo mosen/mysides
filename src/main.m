@@ -52,6 +52,7 @@ int sidebar_add(NSString *name, NSURL *uri, id after)
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
     CFRelease(sflRef);
+    printf("Added sidebar item with name: %s\n", [name UTF8String]);
     return 1;
 }
 
@@ -73,7 +74,7 @@ int sidebar_remove(NSString *name, NSURL *uri)
         if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
             LSSharedFileListItemRemove(sflRef, sflItemRef);
             CFRelease(sflRef);
-            printf("Removed sidebar item with name: %s", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
+            printf("Removed sidebar item with name: %s\n", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
             return 0;
         }
         
@@ -107,28 +108,30 @@ void sidebar_list()
         CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
         CFURLRef urlRef = NULL;
         LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
-        UInt32 itemId = LSSharedFileListItemGetID(sflItemRef);
+//        UInt32 itemId = LSSharedFileListItemGetID(sflItemRef);
         
-        printf("[%u] %s -> %s", itemId, [(NSString *) CFBridgingRelease(nameRef) UTF8String], [(NSString *) CFBridgingRelease(urlRef) UTF8String]);
+        printf("%s -> %s\n",
+               [(NSString *) CFBridgingRelease(nameRef) UTF8String],
+               [(NSString *) CFBridgingRelease(CFURLGetString(urlRef)) UTF8String]);
         if(urlRef)  CFRelease(urlRef);
         if(nameRef) CFRelease(nameRef);
         
-        CFStringRef props[] = {
-            // kLSSharedFileListItemClass,
-            kLSSharedFileListItemTemplateSystemSelector,
-            kLSSharedFileListSpecialItemIdentifier,
-            kLSSharedFileListItemManaged,
-        };
-        int i;
-        for(i = 0; i < sizeof(props)/sizeof(*props); i++) {
-            CFTypeRef propRef = LSSharedFileListItemCopyProperty(sflItemRef, props[i]);
-            printf(" %p: %s = %s (%s)", props[i],
-                   [(NSString *) CFBridgingRelease(props[i]) UTF8String],
-                   propRef,
-                   propRef ? [(id)CFBridgingRelease(CFCopyTypeIDDescription(CFGetTypeID(propRef))) UTF8String] : nil
-                   );
-            if(propRef) CFRelease(propRef);
-        }
+//        CFStringRef props[] = {
+//            // kLSSharedFileListItemClass,
+//            kLSSharedFileListItemTemplateSystemSelector,
+//            kLSSharedFileListSpecialItemIdentifier,
+//            kLSSharedFileListItemManaged,
+//        };
+//        int i;
+//        for(i = 0; i < sizeof(props)/sizeof(*props); i++) {
+//            CFTypeRef propRef = LSSharedFileListItemCopyProperty(sflItemRef, props[i]);
+//            printf("\t%p: %s = %s (%s)\n", props[i],
+//                   [(NSString *) CFBridgingRelease(props[i]) UTF8String],
+//                   propRef,
+//                   propRef ? [(id)CFBridgingRelease(CFCopyTypeIDDescription(CFGetTypeID(propRef))) UTF8String] : nil
+//                   );
+//            if(propRef) CFRelease(propRef);
+//        }
         
     }
     
