@@ -20,11 +20,13 @@ extern CFStringRef kLSSharedFileListItemManaged;
 
 void print_help(char const *arg0)
 {
-    printf("Usage:\n");
-    printf("\t%s list\t- list sidebar items", arg0);
-    printf("\t%s add <name> <uri> [after]\t- append a sidebar item to the end of the list, or after the given name\n", arg0);
-    //printf("\t%s insert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n", arg0);
-    printf("\t%s remove <name>\t- remove a sidebar item\n", arg0);
+    printf("Usage: mysides list | add <name> <uri> | remove <name>\n");
+    printf("\n");
+    printf("\t list - list sidebar items\n");
+    printf("\t add - append a sidebar item to the end of the list\n");
+    //printf("\t\tinsert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n");
+    printf("\t remove - remove a sidebar item\n");
+    printf("\n");
 }
 
 // Find shared file list item by its display name
