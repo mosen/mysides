@@ -34,16 +34,17 @@ void print_help(char const *arg0)
 id find_itemname(LSSharedFileListRef sflRef, NSString *name)
 {
     UInt32 seed;
-    NSArray *list = (__bridge NSArray *)LSSharedFileListCopySnapshot(sflRef, &seed);
+    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
     for(NSObject *obj in list) {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
         CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
         if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
+            if (nameRef) CFRelease(nameRef);
             return (__bridge id)(sflItemRef);
         }
+    if (nameRef) CFRelease(nameRef);
     }
-    
     return nil;
 }
 
@@ -64,7 +65,7 @@ int sidebar_remove(NSString *name, NSURL *uri)
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
     UInt32 seed;
     // Grab list snapshot for enumeration
-    NSArray *list = (__bridge NSArray *)LSSharedFileListCopySnapshot(sflRef, &seed);
+    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
     for(NSObject *obj in list)  {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
@@ -79,7 +80,7 @@ int sidebar_remove(NSString *name, NSURL *uri)
             printf("Removed sidebar item with name: %s\n", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
             return 0;
         }
-        
+        if (nameRef) CFRelease(nameRef);
     }
     
     printf("Could not find sidebar item with display name: %s", [name UTF8String]);
@@ -103,7 +104,7 @@ void sidebar_list()
     }
     
     // Grab list snapshot for enumeration
-    NSArray *list = (__bridge NSArray *)LSSharedFileListCopySnapshot(sflRef, &seed);
+    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
     for(NSObject *object in list) {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)object;
@@ -116,7 +117,7 @@ void sidebar_list()
                [(NSString *) CFBridgingRelease(nameRef) UTF8String],
                [(NSString *) CFBridgingRelease(CFURLGetString(urlRef)) UTF8String]);
         if(urlRef)  CFRelease(urlRef);
-        if(nameRef) CFRelease(nameRef);
+//        if(nameRef) CFRelease(nameRef);
         
 //        CFStringRef props[] = {
 //            // kLSSharedFileListItemClass,
