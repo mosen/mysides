@@ -208,3 +208,7 @@ xcuserdata
 #
 #*.xccheckout
 
+pkgroot
+out
+*.dmg
+*.pkg
