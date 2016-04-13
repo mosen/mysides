@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		34896F721A01FAF00056D353 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		34896F741A01FB080056D353 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		348B071C1CBF10C200A7F918 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		34B1548B1A01BCAB007920BB /* mysides */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mysides; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -50,6 +51,7 @@
 		34B154821A01BCAB007920BB = {
 			isa = PBXGroup;
 			children = (
+				348B071C1CBF10C200A7F918 /* LICENSE */,
 				34896F741A01FB080056D353 /* README.md */,
 				34896F711A01FAF00056D353 /* src */,
 				34B1548C1A01BCAB007920BB /* Products */,
