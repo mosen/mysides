@@ -14,13 +14,14 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 extern CFStringRef kLSSharedFileListSpecialItemIdentifier;
 extern CFStringRef kLSSharedFileListItemTargetName;
 extern CFStringRef kLSSharedFileListItemManaged;
+
 // I am so smart, this symbol isn't exposed by LaunchServices framework, but I get it anyhow with help of "nm" ;)
 #define kLSSharedFileListItemTemplateSystemSelector (CFStringRef)((char *)kLSSharedFileListItemTargetName + (3 * 0x40))
 #define kLSSharedFileListItemClass (CFStringRef)((char *)kLSSharedFileListItemBeforeFirst + (3 * 0x40))
 
 void print_help(char const *arg0)
 {
-    printf("Usage: mysides list | add <name> <uri> | remove <name>\n");
+    printf("Usage: %s list|add <name> <uri>|remove <name>\n", arg0);
     printf("\n");
     printf("\t list - list sidebar items\n");
     printf("\t add - append a sidebar item to the end of the list\n");
@@ -67,21 +68,32 @@ int sidebar_remove(NSString *name, NSURL *uri)
     // Grab list snapshot for enumeration
     NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
     
-    for(NSObject *obj in list)  {
-        LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
-        CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
-        CFURLRef urlRef = NULL;
-        LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
+    if ([[name lowercaseString] isEqualToString: @"all"]) {
+        LSSharedFileListRemoveAllItems(sflRef);
+        CFRelease(sflRef);
         
-        // Found item: remove
-        if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
-            LSSharedFileListItemRemove(sflRef, sflItemRef);
-            CFRelease(sflRef);
-            printf("Removed sidebar item with name: %s\n", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
-            return 0;
+        return 0;
+    } else {
+        printf("neq all\n");
+        
+        for(NSObject *obj in list)  {
+            LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
+            CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
+            CFURLRef urlRef = NULL;
+            LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
+            
+            // Found item: remove
+            if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
+                LSSharedFileListItemRemove(sflRef, sflItemRef);
+                CFRelease(sflRef);
+                printf("Removed sidebar item with name: %s\n", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
+                return 0;
+            }
+            if (nameRef) CFRelease(nameRef);
         }
-        if (nameRef) CFRelease(nameRef);
     }
+    
+
     
     printf("Could not find sidebar item with display name: %s", [name UTF8String]);
     CFRelease(sflRef);
@@ -140,6 +152,24 @@ void sidebar_list()
     
     CFRelease(sflRef);
 }
+
+// Ussage: sfltool add-item [-n <display name>] <list identifier> <URL>
+int add_item(NSString *list_id, NSString *url, NSString *display_name)
+{
+    
+    return 0;
+}
+ 
+/**
+ * Get a list of Shared File Lists.
+ * In OS X 10.11 the `sfltool` indicates whether each file list has been modernized or not. 
+ * (I believe this has to do with whether they use the .sfl file format).
+ */
+//int list_info()
+//{
+//    
+//    return 0;
+//}
 
 int main (int argc, char const *argv[])
 {
