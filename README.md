@@ -4,6 +4,8 @@ A simple CLI tool for Finder sidebar modification.
 
 **NOTE**: I clobbered this together with very little experience in C/CoreFoundation, as a result the code may be horrible.
 
+**NOTE*: As of 10.11 El Capitan you can also use `sfltool` to achieve similar things.
+
 ## Usage ##
 
 List sidebar favorites items:
