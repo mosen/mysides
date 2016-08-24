@@ -95,7 +95,7 @@ int sidebar_remove(NSString *name, NSURL *uri)
     
 
     
-    printf("Could not find sidebar item with display name: %s", [name UTF8String]);
+    printf("Could not find sidebar item with display name: %s\n", [name UTF8String]);
     CFRelease(sflRef);
     return 1;
 }
