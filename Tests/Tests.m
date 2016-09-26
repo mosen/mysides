@@ -1,11 +1,3 @@
-//
-//  Tests.m
-//  Tests
-//
-//  Created by Eamon Brosnan on 10/08/2016.
-//  Copyright © 2016 com.github.mosen. All rights reserved.
-//
-
 #import <XCTest/XCTest.h>
 
 @interface Tests : XCTestCase
@@ -24,16 +16,8 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void)testList {
+    sidebar_list();
 }
 
 @end

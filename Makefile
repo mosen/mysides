@@ -3,7 +3,7 @@
 
 INSTALL_PATH="/usr/local/bin"
 PKGTITLE="mysides"
-PKGVERSION=1.0.0
+PKGVERSION=1.0.1
 PKGID=com.github.mosen.mysides	
 
 #################################################

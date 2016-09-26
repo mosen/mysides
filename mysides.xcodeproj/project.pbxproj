@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3415FB891CBF76D800AB0970 /* SharedFileList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3415FB881CBF76D800AB0970 /* SharedFileList.m */; };
+		34793C291D98AB1500C77BF2 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 34793C281D98AB1500C77BF2 /* Makefile */; };
 		34896F731A01FAF00056D353 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34896F721A01FAF00056D353 /* main.m */; };
 		34E12BA11D5AB324008B512A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E12BA01D5AB324008B512A /* Tests.m */; };
 		34E12BA61D5AB42C008B512A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34896F721A01FAF00056D353 /* main.m */; };
@@ -29,6 +30,7 @@
 /* Begin PBXFileReference section */
 		3415FB871CBF76D800AB0970 /* SharedFileList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedFileList.h; sourceTree = "<group>"; };
 		3415FB881CBF76D800AB0970 /* SharedFileList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedFileList.m; sourceTree = "<group>"; };
+		34793C281D98AB1500C77BF2 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		34896F721A01FAF00056D353 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		34896F741A01FB080056D353 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		348B071C1CBF10C200A7F918 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 		34B154821A01BCAB007920BB = {
 			isa = PBXGroup;
 			children = (
+				34793C281D98AB1500C77BF2 /* Makefile */,
 				348B071C1CBF10C200A7F918 /* LICENSE */,
 				34896F741A01FB080056D353 /* README.md */,
 				34896F711A01FAF00056D353 /* src */,
@@ -182,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34793C291D98AB1500C77BF2 /* Makefile in Sources */,
 				3415FB891CBF76D800AB0970 /* SharedFileList.m in Sources */,
 				34896F731A01FAF00056D353 /* main.m in Sources */,
 			);
@@ -351,6 +355,7 @@
 				34E12BA41D5AB324008B512A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
