@@ -57,7 +57,7 @@ int sidebar_add(NSString *name, NSURL *uri, id after)
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
     CFRelease(sflRef);
     printf("Added sidebar item with name: %s\n", [name UTF8String]);
-    return 1;
+    return 0;
 }
 
 // Remove named item from the sidebar
@@ -122,32 +122,15 @@ void sidebar_list()
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)object;
         CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
         CFURLRef urlRef = NULL;
-        LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
-//        UInt32 itemId = LSSharedFileListItemGetID(sflItemRef);
+        // LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
+        urlRef = LSSharedFileListItemCopyResolvedURL(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, NULL);
+        
+        //if (!nameRef || !urlRef) break;
         
         printf("%s -> %s\n",
                [(NSString *) CFBridgingRelease(nameRef) UTF8String],
                [(NSString *) CFBridgingRelease(CFURLGetString(urlRef)) UTF8String]);
         if(urlRef)  CFRelease(urlRef);
-//        if(nameRef) CFRelease(nameRef);
-        
-//        CFStringRef props[] = {
-//            // kLSSharedFileListItemClass,
-//            kLSSharedFileListItemTemplateSystemSelector,
-//            kLSSharedFileListSpecialItemIdentifier,
-//            kLSSharedFileListItemManaged,
-//        };
-//        int i;
-//        for(i = 0; i < sizeof(props)/sizeof(*props); i++) {
-//            CFTypeRef propRef = LSSharedFileListItemCopyProperty(sflItemRef, props[i]);
-//            printf("\t%p: %s = %s (%s)\n", props[i],
-//                   [(NSString *) CFBridgingRelease(props[i]) UTF8String],
-//                   propRef,
-//                   propRef ? [(id)CFBridgingRelease(CFCopyTypeIDDescription(CFGetTypeID(propRef))) UTF8String] : nil
-//                   );
-//            if(propRef) CFRelease(propRef);
-//        }
-        
     }
     
     CFRelease(sflRef);
