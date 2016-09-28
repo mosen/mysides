@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
 
-@interface SharedFileList : NSObject
+@interface HideCommand : NSObject
 
 @end
