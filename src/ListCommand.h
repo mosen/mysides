@@ -1,8 +1,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>
-#import "Command.h"
+#import "BaseCommand.h"
 
-@interface ListCommand : NSObject
+@interface ListCommand : NSObject <BaseCommand>
 @property NSArray *argv;
 - (id)initWithArgv:(NSArray *)argv;
 - (int)run;

@@ -1,11 +1,11 @@
 #import "HelpCommand.h"
 
 @implementation HelpCommand
-- (id)initWithArgv:(const char *)argv argc:(int)argc {
-    self = [super init];
-    _arg0 = [NSString stringWithCString:&argv[0] encoding:NSASCIIStringEncoding];
-
-    return self;
++ (id<BaseCommand>)withArgv:(NSArray *)argv {
+    HelpCommand *cmd = [[HelpCommand alloc] init];
+    cmd.arg0 = [argv objectAtIndex:0];
+    
+    return cmd;
 }
 
 - (int)run {

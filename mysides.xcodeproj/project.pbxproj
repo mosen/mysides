@@ -24,6 +24,7 @@
 		34793C531D98F40400C77BF2 /* HelpCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34793C511D98F40400C77BF2 /* HelpCommand.m */; };
 		34896F731A01FAF00056D353 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34896F721A01FAF00056D353 /* main.m */; };
 		349E8EFC1D9A59A3008BF409 /* HideCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 349E8EFB1D9A59A3008BF409 /* HideCommand.m */; };
+		349E8EFE1D9C8A86008BF409 /* SFLDTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 349E8EFD1D9C8A86008BF409 /* SFLDTests.m */; };
 		34E12BA11D5AB324008B512A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E12BA01D5AB324008B512A /* Tests.m */; };
 		34E12BA61D5AB42C008B512A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34896F721A01FAF00056D353 /* main.m */; };
 /* End PBXBuildFile section */
@@ -42,7 +43,6 @@
 
 /* Begin PBXFileReference section */
 		34793C281D98AB1500C77BF2 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		34793C2A1D98D01A00C77BF2 /* sharedfilelistd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sharedfilelistd.m; sourceTree = "<group>"; };
 		34793C2C1D98D19000C77BF2 /* ListCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListCommand.h; sourceTree = "<group>"; };
 		34793C2D1D98D19000C77BF2 /* ListCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListCommand.m; sourceTree = "<group>"; };
 		34793C301D98D27B00C77BF2 /* AddCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddCommand.h; sourceTree = "<group>"; };
@@ -51,10 +51,6 @@
 		34793C351D98D28900C77BF2 /* RemoveCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoveCommand.m; sourceTree = "<group>"; };
 		34793C3C1D98D58000C77BF2 /* SFLDListCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLDListCommand.h; sourceTree = "<group>"; };
 		34793C3D1D98D58000C77BF2 /* SFLDListCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLDListCommand.m; sourceTree = "<group>"; };
-		34793C401D98D5A800C77BF2 /* sfltool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sfltool.h; sourceTree = "<group>"; };
-		34793C451D98D89500C77BF2 /* SharedFileList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedFileList.h; sourceTree = "<group>"; };
-		34793C471D98D90D00C77BF2 /* SFLListChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFLListChange.h; path = SharedFileList/SFLListChange.h; sourceTree = "<group>"; };
-		34793C481D98E5E200C77BF2 /* SFLListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFLListItem.h; path = SharedFileList/SFLListItem.h; sourceTree = "<group>"; };
 		34793C491D98E74100C77BF2 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = ../../../../../../System/Library/Frameworks/CoreServices.framework; sourceTree = "<group>"; };
 		34793C4C1D98F34A00C77BF2 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
 		34793C4D1D98F34A00C77BF2 /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Command.m; sourceTree = "<group>"; };
@@ -65,6 +61,8 @@
 		348B071C1CBF10C200A7F918 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		349E8EFA1D9A59A3008BF409 /* HideCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HideCommand.h; sourceTree = "<group>"; };
 		349E8EFB1D9A59A3008BF409 /* HideCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HideCommand.m; sourceTree = "<group>"; };
+		349E8EFD1D9C8A86008BF409 /* SFLDTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLDTests.m; sourceTree = "<group>"; };
+		349E8EFF1D9CE57E008BF409 /* BaseCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseCommand.h; sourceTree = "<group>"; };
 		34B1548B1A01BCAB007920BB /* mysides */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mysides; sourceTree = BUILT_PRODUCTS_DIR; };
 		34E12B9E1D5AB324008B512A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34E12BA01D5AB324008B512A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
@@ -99,18 +97,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		34793C461D98D8E200C77BF2 /* SharedFileList */ = {
-			isa = PBXGroup;
-			children = (
-				34793C401D98D5A800C77BF2 /* sfltool.h */,
-				34793C451D98D89500C77BF2 /* SharedFileList.h */,
-				34793C2A1D98D01A00C77BF2 /* sharedfilelistd.m */,
-				34793C471D98D90D00C77BF2 /* SFLListChange.h */,
-				34793C481D98E5E200C77BF2 /* SFLListItem.h */,
-			);
-			name = SharedFileList;
-			sourceTree = "<group>";
-		};
 		34896F711A01FAF00056D353 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +115,7 @@
 				34793C511D98F40400C77BF2 /* HelpCommand.m */,
 				349E8EFA1D9A59A3008BF409 /* HideCommand.h */,
 				349E8EFB1D9A59A3008BF409 /* HideCommand.m */,
+				349E8EFF1D9CE57E008BF409 /* BaseCommand.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -136,7 +123,6 @@
 		34B154821A01BCAB007920BB = {
 			isa = PBXGroup;
 			children = (
-				34793C461D98D8E200C77BF2 /* SharedFileList */,
 				34793C411D98D68A00C77BF2 /* Frameworks */,
 				34793C281D98AB1500C77BF2 /* Makefile */,
 				348B071C1CBF10C200A7F918 /* LICENSE */,
@@ -161,6 +147,7 @@
 			children = (
 				34E12BA01D5AB324008B512A /* Tests.m */,
 				34E12BA21D5AB324008B512A /* Info.plist */,
+				349E8EFD1D9C8A86008BF409 /* SFLDTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -272,6 +259,7 @@
 				34E12BA61D5AB42C008B512A /* main.m in Sources */,
 				34793C3F1D98D58000C77BF2 /* SFLDListCommand.m in Sources */,
 				34793C371D98D28900C77BF2 /* RemoveCommand.m in Sources */,
+				349E8EFE1D9C8A86008BF409 /* SFLDTests.m in Sources */,
 				34793C4F1D98F34A00C77BF2 /* Command.m in Sources */,
 				34E12BA11D5AB324008B512A /* Tests.m in Sources */,
 				34793C2F1D98D19000C77BF2 /* ListCommand.m in Sources */,

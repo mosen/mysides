@@ -1,7 +1,8 @@
 #import <Foundation/Foundation.h>
+#import "BaseCommand.h"
 
-@interface HelpCommand : NSObject
+@interface HelpCommand : NSObject <BaseCommand>
 @property NSString *arg0;
-
-- (id)initWithArgv:(const char *)argv argc:(int)argc;
++(id<BaseCommand>)withArgv:(NSArray *)argv;
+-(int)run;
 @end

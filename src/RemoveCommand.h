@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
+#import "BaseCommand.h"
 
-@interface RemoveCommand : NSObject
+@interface RemoveCommand : NSObject <BaseCommand>
 
 @property NSString *name;
 
