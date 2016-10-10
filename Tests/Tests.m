@@ -20,4 +20,12 @@
     sidebar_list();
 }
 
+- (void)testRemoveAll {
+    int status = sidebar_remove("all", [NSURL URLWithString:@"file:///"]);
+}
+
+- (void)testAdd {
+    int status = sidebar_add("Test", [NSURL URLWithString:@"file:///tmp"]);
+}
+
 @end

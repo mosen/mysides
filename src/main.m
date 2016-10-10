@@ -11,14 +11,6 @@
 extern CFTypeRef LSSharedFileListItemCopyAliasData(LSSharedFileListItemRef inItem);
 extern int _IconRefIsTemplate(IconRef iconRef);
 
-extern CFStringRef kLSSharedFileListSpecialItemIdentifier;
-extern CFStringRef kLSSharedFileListItemTargetName;
-extern CFStringRef kLSSharedFileListItemManaged;
-
-// I am so smart, this symbol isn't exposed by LaunchServices framework, but I get it anyhow with help of "nm" ;)
-#define kLSSharedFileListItemTemplateSystemSelector (CFStringRef)((char *)kLSSharedFileListItemTargetName + (3 * 0x40))
-#define kLSSharedFileListItemClass (CFStringRef)((char *)kLSSharedFileListItemBeforeFirst + (3 * 0x40))
-
 void print_help(char const *arg0)
 {
     printf("Usage: %s list|add <name> <uri>|remove <name>\n", arg0);
@@ -27,7 +19,13 @@ void print_help(char const *arg0)
     printf("\t add - append a sidebar item to the end of the list\n");
     //printf("\t\tinsert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n");
     printf("\t remove - remove a sidebar item\n");
+    printf("\t version - display the version\n");
     printf("\n");
+}
+
+void print_version(char const *arg0)
+{
+    printf("mysides v");
 }
 
 // Find shared file list item by its display name
@@ -54,6 +52,11 @@ id find_itemname(LSSharedFileListRef sflRef, NSString *name)
 int sidebar_add(NSString *name, NSURL *uri, id after)
 {
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
+    if (!sflRef) {
+        printf("Unable to create sidebar list, LSSharedFileListCreate() fails.");
+        return 2;
+    }
+    
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
     CFRelease(sflRef);
     printf("Added sidebar item with name: %s\n", [name UTF8String]);
@@ -64,6 +67,11 @@ int sidebar_add(NSString *name, NSURL *uri, id after)
 int sidebar_remove(NSString *name, NSURL *uri)
 {
     LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
+    if (!sflRef) {
+        printf("Unable to create sidebar list, LSSharedFileListCreate() fails.");
+        return 2;
+    }
+    
     UInt32 seed;
     // Grab list snapshot for enumeration
     NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
@@ -135,23 +143,6 @@ void sidebar_list()
     CFRelease(sflRef);
 }
 
-// Ussage: sfltool add-item [-n <display name>] <list identifier> <URL>
-int add_item(NSString *list_id, NSString *url, NSString *display_name)
-{
-    
-    return 0;
-}
- 
-/**
- * Get a list of Shared File Lists.
- * In OS X 10.11 the `sfltool` indicates whether each file list has been modernized or not. 
- * (I believe this has to do with whether they use the .sfl file format).
- */
-//int list_info()
-//{
-//    
-//    return 0;
-//}
 
 int main (int argc, char const *argv[])
 {

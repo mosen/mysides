@@ -282,6 +282,7 @@
 		34B154931A01BCAB007920BB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.0.2;
 				PRODUCT_NAME = mysides;
 				SDKROOT = macosx;
 			};
@@ -290,6 +291,7 @@
 		34B154941A01BCAB007920BB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.0.2;
 				PRODUCT_NAME = mysides;
 				SDKROOT = macosx;
 			};
