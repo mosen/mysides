@@ -133,11 +133,14 @@ void sidebar_list()
         // LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
         urlRef = LSSharedFileListItemCopyResolvedURL(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, NULL);
         
-        if (urlRef == NULL) break;
-        
-        printf("%s -> %s\n",
+        if (urlRef == NULL) {
+            printf("%s -> NOTFOUND\n",
+                   [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
+        } else {
+            printf("%s -> %s\n",
                [(NSString *) CFBridgingRelease(nameRef) UTF8String],
                [(NSString *) CFBridgingRelease(CFURLGetString(urlRef)) UTF8String]);
+        }
     }
     
     CFRelease(sflRef);
