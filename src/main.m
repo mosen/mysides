@@ -13,14 +13,12 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 
 void print_help(char const *arg0)
 {
-    printf("Usage: %s list|add <name> <uri>|remove <name>\n", arg0);
-    printf("\n");
+    printf("Usage: %s list|add <name> <uri>|remove <name>\n\n", arg0);
     printf("\t list - list sidebar items\n");
     printf("\t add - append a sidebar item to the end of the list\n");
     //printf("\t\tinsert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n");
     printf("\t remove - remove a sidebar item\n");
-    printf("\t version - display the version\n");
-    printf("\n");
+    printf("\t version - display the version\n\n");
 }
 
 void print_version(char const *arg0)
@@ -101,8 +99,6 @@ int sidebar_remove(NSString *name, NSURL *uri)
         }
     }
     
-
-    
     printf("Could not find sidebar item with display name: %s\n", [name UTF8String]);
     CFRelease(sflRef);
     return 1;
@@ -110,7 +106,16 @@ int sidebar_remove(NSString *name, NSURL *uri)
 
 int sidebar_insert(NSString *name, NSURL *uri, id before)
 {
-    return 1;
+    LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
+    if (!sflRef) {
+        printf("Unable to create sidebar list, LSSharedFileListCreate() fails.");
+        return 2;
+    }
+    
+    LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemBeforeFirst, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
+    CFRelease(sflRef);
+    printf("Inserted sidebar item at begining of list with name: %s\n", [name UTF8String]);
+    return 0;
 }
 
 void sidebar_list()
@@ -156,10 +161,33 @@ int main (int argc, char const *argv[])
         }
         
         if (strcmp(argv[1], "add") == 0) {
+            if (! argv[2] ) {
+                printf("No display name supplied to add!");
+                return 1;
+            }
+            if (! argv[3] ) {
+                printf("No path supplied to add!");
+                return 1;
+            }
             NSString *name = [NSString stringWithUTF8String:argv[2]];
             NSURL *uri = [NSURL URLWithString:[NSString stringWithUTF8String:argv[3]]];
             
             return sidebar_add(name, uri, nil);
+        }
+        
+        if (strcmp(argv[1], "insert") == 0) {
+            if (! argv[2] ) {
+                printf("No display name supplied to insert!");
+                return 1;
+            }
+            if (! argv[3] ) {
+                printf("No path supplied to insert!");
+                return 1;
+            }
+            NSString *name = [NSString stringWithUTF8String:argv[2]];
+            NSURL *uri = [NSURL URLWithString:[NSString stringWithUTF8String:argv[3]]];
+            
+            return sidebar_insert(name, uri, nil);
         }
         
         if (strcmp(argv[1], "remove") == 0) {
@@ -167,18 +195,13 @@ int main (int argc, char const *argv[])
                 printf("No name supplied to remove!\n");
                 return 1;
             }
-            
-            NSString *name = [NSString stringWithUTF8String:argv[2]];
-            NSURL *uri = [NSURL URLWithString:@"file:///"]; // temporary not used
-            return sidebar_remove(name, uri);
-            
+        NSString *name = [NSString stringWithUTF8String:argv[2]];
+        NSURL *uri = [NSURL URLWithString:@"file:///"]; // temporary not used
+        return sidebar_remove(name, uri);
         }
-        
-        
     } else {
         print_help(argv[0]);
         return 1;
     }
-    
     return 0;
 }
