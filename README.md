@@ -8,6 +8,14 @@ A simple CLI tool for Finder sidebar modification.
 
     $ sfltool add-item com.apple.LSSharedFileList.FavoriteItems file:///Path/To/Sidebar/Folder
 
+## Installing ##
+
+The easiest option is to install via Homebrew Casks:
+
+    brew cask install mysides
+
+If you prefer not to use Homebrew, you can also download and run the prebuilt package in the [Releases tab]
+
 ## Usage ##
 
 List sidebar favorites items:
@@ -32,3 +40,4 @@ portions (l) copyleft 2011 Adam Strzelecki nanoant.com
 without whom I would not know much about the LSSharedFileList API.
 
  [1013-regression]: https://openradar.appspot.com/radar?id=4985135170584576
+ [Releases tab]: https://github.com/mosen/mysides/releases
