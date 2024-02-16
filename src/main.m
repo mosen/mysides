@@ -19,25 +19,9 @@ void RemoveSidebarItem(NSString *itemName);
 LSSharedFileListItemRef FindItemByName(NSArray *items, NSString *itemToFind);
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
 BOOL ValidArguments(int argc, const char *argv[]);
+void PrintUsage(char const *arg0);
 
-// Remove named item from the sidebar
-int sidebar_remove(NSString *name, NSURL *uri)
-{
-    LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
-    if (!sflRef) {
-        printf("Unable to create sidebar list, LSSharedFileListCreate() fails.");
-        return 2;
-    }
-    
-    UInt32 seed;
-    // Grab list snapshot for enumeration
-    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
-    
-    if ([[name lowercaseString] isEqualToString: @"all"]) {
-        LSSharedFileListRemoveAllItems(sflRef);
-        CFRelease(sflRef);
-        
-        return 0;
+
     } else {
 
 // Show all items in the sidebar
@@ -136,4 +120,13 @@ BOOL ValidArguments(int argc, const char *argv[]) {
   
   return YES;
 }
+
+// Print the usage
+void PrintUsage(char const *arg0) {
+  printf("Usage: %s list|add <name> <uri>|remove <name>\n\n", arg0);
+  printf("\t list - Lists sidebar items\n");
+  printf("\t add <folder_name> <folder_path> - Appends a sidebar item to the end of the list\n");
+  printf("\t remove <folder_name> - Removes a sidebar item\n");
+  printf("\t clear - Removes all sidebar items\n");
+  printf("\t version - display the version\n\n");
 }
