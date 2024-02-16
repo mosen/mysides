@@ -13,28 +13,7 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 
 // Function declarations
 void ListSidebarItems();
-    
-    for(NSObject *obj in list) {
-        LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
-        CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
-        if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
-            if (nameRef) CFRelease(nameRef);
-            return (__bridge id)(sflItemRef);
-        }
-    if (nameRef) CFRelease(nameRef);
-    }
-    return nil;
-}
-
-// Append an item to the sidebar
-// Return the new index of the item added.
-int sidebar_add(NSString *name, NSURL *uri, id after)
-{
-    LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
-    if (!sflRef) {
-        printf("Unable to create sidebar list, LSSharedFileListCreate() fails.");
-        return 2;
-    }
+NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
     
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
     CFRelease(sflRef);
@@ -80,47 +59,17 @@ void ListSidebarItems() {
   CFRelease(sharedFileList);
 }
         } else {
-            printf("%s -> %s\n",
-               [(NSString *) CFBridgingRelease(nameRef) UTF8String],
-               [(NSString *) CFBridgingRelease(CFURLGetString(urlRef)) UTF8String]);
-        }
-    }
-    
-    CFRelease(sflRef);
+
+// Validate the sidebar list exists and is not empty
+NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList) {
+  NSArray *items = CFBridgingRelease(LSSharedFileListCopySnapshot(sharedFileList, NULL));
+  if (items.count == 0) {
+    // The list is empty
+    printf("The Sidebar is empty.\n");
+    exit(1); // exit with error
+  }
+  return items;
 }
-
-
-int main (int argc, char const *argv[])
-{
-    if(argc >= 2) {
-        if (strcmp(argv[1], "list") == 0) {
-            sidebar_list();
-            return 0;
-        }
-        
-        if (strcmp(argv[1], "add") == 0) {
-            if (! argv[2] ) {
-                printf("No display name supplied to add!");
-                return 1;
-            }
-            if (! argv[3] ) {
-                printf("No path supplied to add!");
-                return 1;
-            }
-            NSString *name = [NSString stringWithUTF8String:argv[2]];
-            NSURL *uri = [NSURL URLWithString:[NSString stringWithUTF8String:argv[3]]];
-            
-            return sidebar_add(name, uri, nil);
-        }
-        
-        if (strcmp(argv[1], "insert") == 0) {
-            if (! argv[2] ) {
-                printf("No display name supplied to insert!");
-                return 1;
-            }
-            if (! argv[3] ) {
-                printf("No path supplied to insert!");
-                return 1;
             }
             NSString *name = [NSString stringWithUTF8String:argv[2]];
             NSURL *uri = [NSURL URLWithString:[NSString stringWithUTF8String:argv[3]]];
