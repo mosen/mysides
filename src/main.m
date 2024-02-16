@@ -11,27 +11,8 @@
 extern CFTypeRef LSSharedFileListItemCopyAliasData(LSSharedFileListItemRef inItem);
 extern int _IconRefIsTemplate(IconRef iconRef);
 
-void print_help(char const *arg0)
-{
-    printf("Usage: %s list|add <name> <uri>|remove <name>\n\n", arg0);
-    printf("\t list - list sidebar items\n");
-    printf("\t add - append a sidebar item to the end of the list\n");
-    //printf("\t\tinsert <name> <uri> [before]\t- insert a sidebar item at the start of the list, or before the given name\n");
-    printf("\t remove - remove a sidebar item\n");
-    printf("\t version - display the version\n\n");
-}
-
-void print_version(char const *arg0)
-{
-    printf("mysides v");
-}
-
-// Find shared file list item by its display name
-// Not responsible for allocating or releasing the list reference.
-id find_itemname(LSSharedFileListRef sflRef, NSString *name)
-{
-    UInt32 seed;
-    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
+// Function declarations
+void ListSidebarItems();
     
     for(NSObject *obj in list) {
         LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
@@ -80,67 +61,24 @@ int sidebar_remove(NSString *name, NSURL *uri)
         
         return 0;
     } else {
-        printf("neq all\n");
-        
-        for(NSObject *obj in list)  {
-            LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)obj;
-            CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
-            CFURLRef urlRef = NULL;
-            LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
-            
-            // Found item: remove
-            if (CFStringCompare(nameRef, (__bridge CFStringRef)name, 0) == 0) {
-                LSSharedFileListItemRemove(sflRef, sflItemRef);
-                CFRelease(sflRef);
-                printf("Removed sidebar item with name: %s\n", [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
-                return 0;
-            }
-            if (nameRef) CFRelease(nameRef);
-        }
-    }
-    
-    printf("Could not find sidebar item with display name: %s\n", [name UTF8String]);
-    CFRelease(sflRef);
-    return 1;
-}
 
-int sidebar_insert(NSString *name, NSURL *uri, id before)
-{
-    LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
-    if (!sflRef) {
-        printf("Unable to create sidebar list, LSSharedFileListCreate() fails.");
-        return 2;
-    }
-    
-    LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemBeforeFirst, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
-    CFRelease(sflRef);
-    printf("Inserted sidebar item at begining of list with name: %s\n", [name UTF8String]);
-    return 0;
+// Show all items in the sidebar
+void ListSidebarItems() {
+  LSSharedFileListRef sharedFileList = LSSharedFileListCreate(NULL, kLSSharedFileListFavoriteItems, NULL);
+  NSArray *items = ValidateSideBarList(sharedFileList);
+  
+  for (id item in items) {
+    LSSharedFileListItemRef itemRef = (__bridge LSSharedFileListItemRef)item;
+    CFStringRef displayName = LSSharedFileListItemCopyDisplayName(itemRef);
+    CFURLRef itemURL = LSSharedFileListItemCopyResolvedURL(itemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, NULL);
+    printf("%s -> %s\n",
+           [(NSString *)CFBridgingRelease(displayName) UTF8String],
+           itemURL ? [(NSString *)CFBridgingRelease(CFURLGetString(itemURL)) UTF8String] : "NOT FOUND");
+    if (itemURL) CFRelease(itemURL);
+  }
+  
+  CFRelease(sharedFileList);
 }
-
-void sidebar_list()
-{
-    LSSharedFileListRef sflRef = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListFavoriteItems, NULL);
-    UInt32 seed;
-    
-    if(!sflRef) {
-        printf("No list!");
-        return;
-    }
-    
-    // Grab list snapshot for enumeration
-    NSArray *list = CFBridgingRelease(LSSharedFileListCopySnapshot(sflRef, &seed));
-    
-    for(NSObject *object in list) {
-        LSSharedFileListItemRef sflItemRef = (__bridge LSSharedFileListItemRef)object;
-        CFStringRef nameRef = LSSharedFileListItemCopyDisplayName(sflItemRef);
-        CFURLRef urlRef = NULL;
-        // LSSharedFileListItemResolve(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, &urlRef, NULL);
-        urlRef = LSSharedFileListItemCopyResolvedURL(sflItemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, NULL);
-        
-        if (urlRef == NULL) {
-            printf("%s -> NOTFOUND\n",
-                   [(NSString *) CFBridgingRelease(nameRef) UTF8String]);
         } else {
             printf("%s -> %s\n",
                [(NSString *) CFBridgingRelease(nameRef) UTF8String],
