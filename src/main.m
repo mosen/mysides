@@ -18,12 +18,7 @@ void AddSidebarItem(NSString *itemName, NSURL *itemURL);
 void RemoveSidebarItem(NSString *itemName);
 LSSharedFileListItemRef FindItemByName(NSArray *items, NSString *itemToFind);
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
-    
-    LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
-    CFRelease(sflRef);
-    printf("Added sidebar item with name: %s\n", [name UTF8String]);
-    return 0;
-}
+BOOL ValidArguments(int argc, const char *argv[]);
 
 // Remove named item from the sidebar
 int sidebar_remove(NSString *name, NSURL *uri)
@@ -119,25 +114,26 @@ NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList) {
   }
   return items;
 }
-            }
-            NSString *name = [NSString stringWithUTF8String:argv[2]];
-            NSURL *uri = [NSURL URLWithString:[NSString stringWithUTF8String:argv[3]]];
-            
-            return sidebar_insert(name, uri, nil);
-        }
+
+// Validate the command line arguments
+BOOL ValidArguments(int argc, const char *argv[]) {
+  if (argc < 2) {
+    printf("Error: Missing command.\n");
+    PrintUsage(argv[0]);
+    return NO;
+  }
+  
+  NSString *command = [NSString stringWithUTF8String:argv[1]];
+  if ([command isEqualToString:@"add"] && (argc < 4)) {
+    printf("Error: Missing folder name or folder path.\nUsage: mysides add my_folder file:///Users/my_username/my_folder\n");
+    return NO;
+  }
         
-        if (strcmp(argv[1], "remove") == 0) {
-            if (strlen(argv[2]) == 0) {
-                printf("No name supplied to remove!\n");
-                return 1;
+  if ([command isEqualToString:@"remove"] && (argc < 3)) {
+    printf("Error: Missing folder name.\nUsage: mysides remove my_folder\n");
+    return NO;
             }
-        NSString *name = [NSString stringWithUTF8String:argv[2]];
-        NSURL *uri = [NSURL URLWithString:@"file:///"]; // temporary not used
-        return sidebar_remove(name, uri);
-        }
-    } else {
-        print_help(argv[0]);
-        return 1;
-    }
-    return 0;
+  
+  return YES;
+}
 }
