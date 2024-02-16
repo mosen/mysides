@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>
 
+// Function prototypes
 extern CFTypeRef LSSharedFileListItemCopyAliasData(LSSharedFileListItemRef inItem);
 extern int _IconRefIsTemplate(IconRef iconRef);
 
@@ -22,7 +23,30 @@ BOOL ValidArguments(int argc, const char *argv[]);
 void PrintUsage(char const *arg0);
 
 
-    } else {
+// Main entry point for the program
+int main(int argc, const char *argv[]) {
+  if (!ValidArguments(argc, argv)) {
+    return 1;
+  }
+  
+  NSString *command = [NSString stringWithUTF8String:argv[1]];
+  if ([command isEqualToString:@"list"]) {
+    ListSidebarItems();
+  } else if ([command isEqualToString:@"clear"]) {
+    ClearSidebarItems();
+  } else if ([command isEqualToString:@"add"]) {
+    NSString *itemName = [NSString stringWithUTF8String:argv[2]];
+    NSURL *itemURL = [NSURL URLWithString:[NSString stringWithUTF8String:argv[3]]];
+    AddSidebarItem(itemName, itemURL);
+  } else if ([command isEqualToString:@"remove"]) {
+    NSString *itemName = [NSString stringWithUTF8String:argv[2]];
+    RemoveSidebarItem(itemName);
+  } else {
+    printf("Error: Unknown command '%s'\n", argv[1]);
+    PrintUsage(argv[0]);
+    return 1;
+  }
+}
 
 // Show all items in the sidebar
 void ListSidebarItems() {
@@ -68,7 +92,7 @@ void RemoveSidebarItem(NSString *itemName) {
     LSSharedFileListItemRemove(sharedFileList, itemToRemove);
     CFRelease(sharedFileList);
     printf("Removed Sidebar item with name: %s\n", [itemName UTF8String]);
-        } else {
+  } else {
     printf("Could not find sidebar item with name: %s\n", [itemName UTF8String]);
     CFRelease(sharedFileList);
   }
@@ -112,11 +136,11 @@ BOOL ValidArguments(int argc, const char *argv[]) {
     printf("Error: Missing folder name or folder path.\nUsage: mysides add my_folder file:///Users/my_username/my_folder\n");
     return NO;
   }
-        
+  
   if ([command isEqualToString:@"remove"] && (argc < 3)) {
     printf("Error: Missing folder name.\nUsage: mysides remove my_folder\n");
     return NO;
-            }
+  }
   
   return YES;
 }
