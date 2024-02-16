@@ -13,6 +13,7 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 
 // Function declarations
 void ListSidebarItems();
+void ClearSidebarItems();
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
     
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
@@ -57,6 +58,14 @@ void ListSidebarItems() {
   }
   
   CFRelease(sharedFileList);
+}
+
+// Remove all items from the sidebar
+void ClearSidebarItems() {
+  LSSharedFileListRef sharedFileList = LSSharedFileListCreate(NULL, kLSSharedFileListFavoriteItems, NULL);
+  LSSharedFileListRemoveAllItems(sharedFileList);
+  CFRelease(sharedFileList);
+  printf("Removed all sidebar items. \n");
 }
         } else {
 
