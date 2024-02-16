@@ -15,6 +15,7 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 void ListSidebarItems();
 void ClearSidebarItems();
 void AddSidebarItem(NSString *itemName, NSURL *itemURL);
+void RemoveSidebarItem(NSString *itemName);
 LSSharedFileListItemRef FindItemByName(NSArray *items, NSString *itemToFind);
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
     
@@ -77,7 +78,22 @@ void AddSidebarItem(NSString *itemName, NSURL *itemURL) {
   CFRelease(sharedFileList);
   printf("Added sidebar item: %s\n", [itemName UTF8String]);
 }
+
+// Remove item from the sidebar
+void RemoveSidebarItem(NSString *itemName) {
+  LSSharedFileListRef sharedFileList = LSSharedFileListCreate(NULL, kLSSharedFileListFavoriteItems, NULL);
+  NSArray *items = ValidateSideBarList(sharedFileList);
+  LSSharedFileListItemRef itemToRemove = FindItemByName(items, itemName);
+  
+  if (itemToRemove != NULL) {
+    LSSharedFileListItemRemove(sharedFileList, itemToRemove);
+    CFRelease(sharedFileList);
+    printf("Removed Sidebar item with name: %s\n", [itemName UTF8String]);
         } else {
+    printf("Could not find sidebar item with name: %s\n", [itemName UTF8String]);
+    CFRelease(sharedFileList);
+  }
+}
 
 // Find an item in the list by name
 LSSharedFileListItemRef FindItemByName(NSArray *items, NSString *itemToFind) {
