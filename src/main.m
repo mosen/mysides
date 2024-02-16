@@ -14,6 +14,7 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 // Function declarations
 void ListSidebarItems();
 void ClearSidebarItems();
+void AddSidebarItem(NSString *itemName, NSURL *itemURL);
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
     
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
@@ -66,6 +67,14 @@ void ClearSidebarItems() {
   LSSharedFileListRemoveAllItems(sharedFileList);
   CFRelease(sharedFileList);
   printf("Removed all sidebar items. \n");
+}
+
+// Append an item to the sidebar
+void AddSidebarItem(NSString *itemName, NSURL *itemURL) {
+  LSSharedFileListRef sharedFileList = LSSharedFileListCreate(NULL, kLSSharedFileListFavoriteItems, NULL);
+  LSSharedFileListInsertItemURL(sharedFileList, kLSSharedFileListItemLast, (__bridge CFStringRef)itemName, NULL, (__bridge CFURLRef)itemURL, NULL, NULL);
+  CFRelease(sharedFileList);
+  printf("Added sidebar item: %s\n", [itemName UTF8String]);
 }
         } else {
 
