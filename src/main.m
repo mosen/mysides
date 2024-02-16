@@ -15,6 +15,7 @@ extern int _IconRefIsTemplate(IconRef iconRef);
 void ListSidebarItems();
 void ClearSidebarItems();
 void AddSidebarItem(NSString *itemName, NSURL *itemURL);
+LSSharedFileListItemRef FindItemByName(NSArray *items, NSString *itemToFind);
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList);
     
     LSSharedFileListInsertItemURL(sflRef, kLSSharedFileListItemLast, (__bridge CFStringRef)name, NULL, (__bridge CFURLRef)uri, NULL, NULL);
@@ -77,6 +78,20 @@ void AddSidebarItem(NSString *itemName, NSURL *itemURL) {
   printf("Added sidebar item: %s\n", [itemName UTF8String]);
 }
         } else {
+
+// Find an item in the list by name
+LSSharedFileListItemRef FindItemByName(NSArray *items, NSString *itemToFind) {
+  for (id item in items) {
+    LSSharedFileListItemRef sharedFileListRef = (__bridge LSSharedFileListItemRef)item;
+    CFStringRef itemNameCFRef = LSSharedFileListItemCopyDisplayName(sharedFileListRef);
+    NSString *itemName = (__bridge_transfer NSString *)itemNameCFRef;
+    if ([itemName isEqualToString:itemToFind]) {
+      return sharedFileListRef;
+    }
+  }
+  
+  return NULL;
+}
 
 // Validate the sidebar list exists and is not empty
 NSArray* ValidateSideBarList(LSSharedFileListRef sharedFileList) {
