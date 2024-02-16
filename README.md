@@ -1,12 +1,7 @@
 # mysides #
 
-A simple CLI tool for Finder sidebar modification.
+A simple CLI tool for Finder Sidebar modification.
 
-**NOTE**: I clobbered this together with very little experience in C/CoreFoundation, as a result the code may be horrible.
-
-**NOTE*: Using Versions 10.11 El Capitan or 10.12 Sierra, you can also use `sfltool` to achieve similar things. _These options were removed in 10.13 High Sierra onwards [*][1013-regression]._ Example:
-
-    $ sfltool add-item com.apple.LSSharedFileList.FavoriteItems file:///Path/To/Sidebar/Folder
 
 ## Usage ##
 
@@ -18,9 +13,9 @@ Append a new item to the end of a list:
 
     mysides add example file:///Users/Shared/example
 
-Insert a new item at the start of the list:
+Remove all sidebar favorites
 
-    mysides insert example file:///Users/Shared/example
+    mysides clear
 
 Remove the item (by name):
 
